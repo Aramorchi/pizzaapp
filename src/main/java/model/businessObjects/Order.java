@@ -74,11 +74,7 @@ public class Order implements IOrder {
 
     @Override
     public int getOrderPrice() {
-        if(price < MINIMUM_PRICE_FREE_DELIVERY) {
-            return price + DELIVERY_PRICE;
-        } else {
-            return price;
-        }
+        return price;
     }
 
     @Override
