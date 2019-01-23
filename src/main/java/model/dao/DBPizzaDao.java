@@ -70,30 +70,13 @@ public class DBPizzaDao implements IPizzaDao {
     @Override
     public void deletePizza(String username, Size size) {
         try {
-            PreparedStatement stmt = connection.prepareStatement("DELETE FROM users WHERE pizzaName=? and pizzaSize=?");
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM pizzas WHERE pizzaName=? and pizzaSize=?");
             stmt.setString(GETTING_PIZZA_NAME_INDEX, username);
             stmt.setString(GETTING_PIZZA_SIZE_INDEX, size.name());
             stmt.execute();
 
             stmt.close();
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        IPizza pizza = new Pizza();
-        pizza.setName("Bratislava");
-        pizza.setSize(Size.LARGE);
-        pizza.setPrice(12);
-
-        try {
-            DBPizzaDao dbPizzaDao = new DBPizzaDao();
-
-            dbPizzaDao.addPizza(pizza);
-
-            System.out.println(dbPizzaDao.getPizza("Bratislava", Size.LARGE).getName());
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
