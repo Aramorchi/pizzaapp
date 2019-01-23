@@ -35,7 +35,7 @@ public class ConnectionManager {
   
     String url      = "jdbc:mysql://localhost:3306/pizzaapp?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     String user     = "root";
-    String password = "3557116angelA";
+    String password = "";
   
     connection = DriverManager.getConnection(url, user, password);
   }
