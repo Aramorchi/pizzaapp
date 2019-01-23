@@ -17,7 +17,7 @@ public class DBUserDao implements IUserDao {
     private static final int ADDING_USER_PHONE_INDEX = 4;
     
     public DBUserDao()
-        throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        throws SQLException, InstantiationException, IllegalAccessException {
         try {
             connection = ConnectionManager.getInstance().getConnection();
         } catch (ClassNotFoundException e) {
