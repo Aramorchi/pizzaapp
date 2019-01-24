@@ -1,18 +1,21 @@
 package model.dao;
 
-import model.businessObjects.IOrder;
-import model.businessObjects.Order;
+import model.businessObjects.*;
 import model.utils.Size;
 import model.utils.Status;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class DBOrderDao implements IOrderDao {
     private Connection connection;
     private static final int GETTING_ORDER_ORDER_ID_INDEX = 1;
+
+    private static final int GETTING_ALL_USER_ORDERS_USER_ID_INDEX = 1;
 
     private static final int DELETING_ORDER_ORDER_ID_INDEX = 1;
 
@@ -121,8 +124,100 @@ public class DBOrderDao implements IOrderDao {
             e.printStackTrace();
         }
     }
+
     @Override
     public List<IOrder> getAllOrdersForUser(long userId) {
-        return null;
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT DISTINCT orderId FROM orders WHERE userId=?");
+            stmt.setLong(GETTING_ALL_USER_ORDERS_USER_ID_INDEX, userId);
+            ResultSet result = stmt.executeQuery();
+
+            List<Integer> ordersIDs = new ArrayList<>();
+
+            while(result.next()) {
+                ordersIDs.add(result.getInt("orderId"));
+            }
+            result.close();
+            stmt.close();
+
+            return ordersIDs.stream().map(this::getOrder).collect(Collectors.toList());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void main(String[] args) {
+        IUser user = new User();
+
+        user.setUserLogin("Ricardo Milos");
+        user.setUserPassword("FlexTime");
+
+        IPizza pizzaOne = new Pizza();
+        IPizza pizzaTwo = new Pizza();
+        IPizza pizzaThree = new Pizza();
+
+        pizzaOne.setId(4);
+        pizzaTwo.setId(6);
+        pizzaThree.setId(7);
+
+        pizzaOne.setName("Flugegehaimen");
+        pizzaTwo.setName("Ricardo Milos");
+        pizzaThree.setName("Janitor");
+
+        pizzaOne.setPrice(62);
+        pizzaTwo.setPrice(49);
+        pizzaThree.setPrice(90);
+
+        pizzaOne.setSize(Size.MEDIUM);
+        pizzaTwo.setSize(Size.SMALL);
+        pizzaThree.setSize(Size.LARGE);
+
+        IOrder order = new Order();
+        IOrder secondOrder = new Order();
+
+        order.setUserId(1);
+        order.addToOrder(1);
+        order.addToOrder(3);
+        order.setStatus(Status.BAKING);
+        order.setPhone("11111111");
+        order.setAddress("Bratislava, Communism street");
+        order.setOrderPrice(126);
+        order.setCreationTime(LocalDateTime.now());
+        order.setDeadline(LocalDateTime.now().plusMinutes(50));
+        order.setDeliveredTime(LocalDateTime.now().plusMinutes(42));
+
+        secondOrder.setUserId(1);
+        secondOrder.addToOrder(2);
+        secondOrder.addToOrder(2);
+        secondOrder.addToOrder(2);
+        secondOrder.setStatus(Status.BAKING);
+        secondOrder.setPhone("11112111");
+        secondOrder.setAddress("Bratislava, Czech street");
+        secondOrder.setOrderPrice(147);
+        secondOrder.setCreationTime(LocalDateTime.now());
+        secondOrder.setDeadline(LocalDateTime.now().plusMinutes(50));
+        secondOrder.setDeliveredTime(LocalDateTime.now().plusMinutes(38));
+
+        try {
+            IUserDao dbUserDao = new DBUserDao();
+            IOrderDao dbOrderDao = new DBOrderDao();
+            IPizzaDao dbPizzaDao = new DBPizzaDao();
+
+            dbUserDao.addUser(user);
+
+            dbPizzaDao.addPizza(pizzaOne);
+            dbPizzaDao.addPizza(pizzaTwo);
+            dbPizzaDao.addPizza(pizzaThree);
+
+            dbOrderDao.addOrder(order);
+            dbOrderDao.addOrder(secondOrder);
+
+            List<IOrder> orders = dbOrderDao.getAllOrdersForUser(1);
+            orders.stream().forEach(orderr -> System.out.println(orderr.getAddress()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
