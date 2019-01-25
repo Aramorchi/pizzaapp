@@ -147,6 +147,25 @@ public class DBOrderDao implements IOrderDao {
         }
     }
 
+    @Override
+    public Long getLastOrderId() {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT MAX(orderId) FROM orders");
+            ResultSet result = stmt.executeQuery();
+
+            result.next();
+            Long lastId = result.getLong("MAX(orderId)");
+
+            result.close();
+            stmt.close();
+
+            return lastId;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static void main(String[] args) {
         IUser user = new User();
 
@@ -177,6 +196,7 @@ public class DBOrderDao implements IOrderDao {
         IOrder secondOrder = new Order();
 
         order.setUserId(1);
+        order.setOrderId(1);
         order.addToOrder(1);
         order.addToOrder(3);
         order.setStatus(Status.BAKING);
@@ -187,6 +207,7 @@ public class DBOrderDao implements IOrderDao {
         order.setDeadline(LocalDateTime.now().plusMinutes(50));
         order.setDeliveredTime(LocalDateTime.now().plusMinutes(42));
 
+        secondOrder.setOrderId(2);
         secondOrder.setUserId(1);
         secondOrder.addToOrder(2);
         secondOrder.addToOrder(2);
@@ -215,6 +236,8 @@ public class DBOrderDao implements IOrderDao {
 
             List<IOrder> orders = dbOrderDao.getAllOrdersForUser(1);
             orders.stream().forEach(orderr -> System.out.println(orderr.getAddress()));
+
+            System.out.println(dbOrderDao.getLastOrderId());
 
         } catch (Exception e) {
             e.printStackTrace();

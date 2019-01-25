@@ -9,4 +9,5 @@ public interface IOrderDao {
     IOrder getOrder(long orderId);
     void addOrder(IOrder order);
     void deleteOrder(long orderId);
+    Long getLastOrderId();
 }
