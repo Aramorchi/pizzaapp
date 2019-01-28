@@ -5,6 +5,7 @@ public interface IBasket {
     void addToBasket(int pizzaId, double pizzaPrice);
     void deleteFromBasket(int pizzaId, double pizzaPrice);
     double getPrice();
+    double getPizzaPrice(int pizzaId);
     void setUserId(int userId);
     int getUserId();
 }

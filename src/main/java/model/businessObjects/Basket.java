@@ -1,11 +1,16 @@
 package model.businessObjects;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Basket implements IBasket {
     private int userId;
-    private List<Integer> pizzaIDs;
+    private Map<Integer, Double> pizzaIDs;
     private double price;
+
+    public Basket() {
+        pizzaIDs = new HashMap<>();
+    }
 
     @Override
     public void clearBasket() {
@@ -15,19 +20,24 @@ public class Basket implements IBasket {
 
     @Override
     public void addToBasket(int pizzaId, double pizzaPrice) {
-        pizzaIDs.add(pizzaId);
+        pizzaIDs.put(pizzaId, pizzaPrice);
         this.price += pizzaPrice;
     }
 
     @Override
     public void deleteFromBasket(int pizzaId, double pizzaPrice) {
-        pizzaIDs.remove(Integer.valueOf(pizzaId));
+        pizzaIDs.remove(pizzaId);
         this.price -= pizzaPrice;
     }
 
     @Override
     public double getPrice() {
         return price;
+    }
+
+    @Override
+    public double getPizzaPrice(int pizzaId) {
+        return pizzaIDs.get(pizzaId);
     }
 
     @Override

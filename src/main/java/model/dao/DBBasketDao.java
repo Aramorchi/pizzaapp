@@ -3,29 +3,20 @@ package model.dao;
 import model.businessObjects.Basket;
 import model.businessObjects.IBasket;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DBBasketDao implements IBasketDao {
     private Connection connection;
     private static final int GETTING_BASKET_USER_ID_INDEX = 1;
 
-    private static final int GETTING_ALL_USER_ORDERS_USER_ID_INDEX = 1;
+    private static final int DELETING_BASKET_ORDER_ID_INDEX = 1;
 
-    private static final int DELETING_ORDER_ORDER_ID_INDEX = 1;
+    private static final int REMOVING_FROM_BASKET_USER_ID_INDEX = 1;
+    private static final int REMOVING_FROM_BASKET_PIZZA_ID = 2;
 
-    private static final int ADDING_ORDER_USER_ID_INDEX = 1;
-    private static final int ADDING_ORDER_ORDER_ID_INDEX = 2;
-    private static final int ADDING_ORDER_PIZZA_ID_INDEX = 3;
-    private static final int ADDING_ORDER_PRICE_INDEX = 4;
-    private static final int ADDING_ORDER_CREATION_TIME_INDEX = 5;
-    private static final int ADDING_ORDER_DEADLINE_INDEX = 6;
-    private static final int ADDING_ORDER_DELIVERED_TIME_INDEX = 7;
-    private static final int ADDING_ORDER_ORDER_STATUS_INDEX = 8;
-    private static final int ADDING_ORDER_ADDRESS_INDEX = 9;
-    private static final int ADDING_ORDER_PHONE_INDEX = 10;
+    private static final int ADDING_BASKET_USER_ID_INDEX = 1;
+    private static final int ADDING_BASKET_PIZZA_ID_INDEX = 2;
+    private static final int ADDING_BASKET_PIZZA_PRICE_INDEX = 3;
 
     public DBBasketDao()
             throws SQLException, InstantiationException, IllegalAccessException {
@@ -37,10 +28,10 @@ public class DBBasketDao implements IBasketDao {
     }
 
     @Override
-    public IBasket getBasketOfUser(long userId) {
+    public IBasket getBasketOfUser(int userId) {
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM basket WHERE userId=?");
-            stmt.setLong(GETTING_BASKET_USER_ID_INDEX, userId);
+            stmt.setInt(GETTING_BASKET_USER_ID_INDEX, userId);
             ResultSet result = stmt.executeQuery();
 
             IBasket basket = new Basket();
@@ -61,23 +52,40 @@ public class DBBasketDao implements IBasketDao {
         }
     }
 
-    @Override
-    public void saveBasketOfUserToStorage(IBasket userBasket) {
 
+    @Override
+    public void deleteUserBasket(int userId) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM basket WHERE userId=?");
+            stmt.setInt(DELETING_BASKET_ORDER_ID_INDEX, userId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void deleteUserBasket(long userId) {
-
+    public void addToBasket(int userId, int pizzaId, double pizzaPrice) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO basket VALUES(?,?,?)");
+            stmt.setInt(ADDING_BASKET_USER_ID_INDEX, userId);
+            stmt.setInt(ADDING_BASKET_PIZZA_ID_INDEX, pizzaId);
+            stmt.setDouble(ADDING_BASKET_PIZZA_PRICE_INDEX, pizzaPrice);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void addToBasket(long userId, int pizzaId, double pizzaPrice) {
-
-    }
-
-    @Override
-    public void removeFromBasket(long userId, int pizzaId) {
-
+    public void removeFromBasket(int userId, int pizzaId) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("REMOVE FROM basket WHERE userId=? AND pizzaId=?");
+            stmt.setInt(REMOVING_FROM_BASKET_USER_ID_INDEX, userId);
+            stmt.setInt(REMOVING_FROM_BASKET_PIZZA_ID, pizzaId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
