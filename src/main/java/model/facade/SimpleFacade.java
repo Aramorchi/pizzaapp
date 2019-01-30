@@ -1,0 +1,51 @@
+package model.facade;
+
+import model.businessObjects.IPizza;
+import model.managers.IBasketManager;
+import model.managers.IOrderManager;
+import model.managers.IPizzaManager;
+import model.managers.IUserManager;
+import model.utils.Size;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class SimpleFacade implements IFacade {
+    private IUserManager userManager;
+    private IPizzaManager pizzaManager;
+    private IBasketManager basketManager;
+    private IOrderManager orderManager;
+
+    public List<String> getPizzaNames() {
+        return pizzaManager.getAllPizzas().stream().map(IPizza::getName).collect(Collectors.toList());
+    }
+
+    public void addPizzaToBasket(String pizzaName) {
+        int userId = userManager.getCurrentUserId();
+        basketManager.addPizzaToBasket(userId, pizzaName, Size.MEDIUM);
+    }
+
+    public void logIn(String login, String password) {
+        userManager.logIn(login, password);
+    }
+
+    public void registerNewUser(String login, String password) {
+        userManager.register(login, password);
+    }
+
+    public void registerNewUser(String login, String password, String phone) {
+        userManager.register(login, password, phone);
+    }
+
+    public void logOut() {
+        userManager.logOut();
+    }
+
+    public void confirmOrder(String address, String phone) {
+        basketManager.createOrder(userManager.getCurrentUserId(), address, phone);
+    }
+
+    public void confirmOrder(String address) {
+        basketManager.createOrder(userManager.getCurrentUserId(), address, userManager.getCurrentUserPhone());
+    }
+}

@@ -12,8 +12,8 @@ public interface IPizza {
     void setName(String name);
     Size getSize();
     void setSize(Size size);
-    int getPrice();
-    void setPrice(int price);
+    double getPrice();
+    void setPrice(double price);
     List<Ingredient> getIngredients();
     void setIngredients(List<Ingredient> ingredients);
     void addIngredient(Ingredient ingredient);

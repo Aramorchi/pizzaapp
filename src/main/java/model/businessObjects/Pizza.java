@@ -9,8 +9,17 @@ public class Pizza implements IPizza {
     private int id;
     private String name;
     private Size size;
-    private int price;
+    private double price;
 
+    public Pizza() {
+
+    }
+
+    public Pizza(String name, Size size, double price) {
+        this.name = name;
+        this.size = size;
+        this.price = price;
+    }
 
     public int getId() {
         return id;
@@ -41,12 +50,12 @@ public class Pizza implements IPizza {
     }
 
     @Override
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
     @Override
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
