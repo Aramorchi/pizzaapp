@@ -2,6 +2,7 @@ package model.managers;
 
 public interface IUserManager {
     int getCurrentUserId();
+    String getCurrentUsername();
     String getCurrentUserPhone();
     void logIn(String login, String password);
     void logOut();

@@ -4,35 +4,34 @@ import model.facade.SimpleFacade;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
-public class SignUpServlet extends HttpServlet {
+/**
+ * Created by Lenovo on 02.02.2019.
+ */
+public class PizzasCatalogServlet extends HttpServlet {
     private SimpleFacade facade = SimpleFacade.getInstance();
 
-    public SignUpServlet() throws IllegalAccessException, SQLException, InstantiationException {
+    public PizzasCatalogServlet() throws IllegalAccessException, SQLException, InstantiationException {
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher view = req.getRequestDispatcher("/RegistrationPage.html");
+        List<String> pizzaNames = facade.getPizzaNames();
+        req.setAttribute("pizzaNames", pizzaNames);
+        RequestDispatcher view = req.getRequestDispatcher("/Catalog.jsp");
         view.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
-        String repeatedPassword = req.getParameter("passwordRepeat");
-
-        if(repeatedPassword.equals(password)) {
-            facade.registerNewUser(username, password);
-        } else {
-            doGet(req, resp);
-        }
+        String pizzaName = req.getParameterValues("pizza")[0];
+        facade.addPizzaToBasket(pizzaName);
+        doGet(req,resp);
     }
 }

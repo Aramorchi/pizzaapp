@@ -15,6 +15,16 @@
         <url-pattern>/signin</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>SignOut</servlet-name>
+        <servlet-class>userInterface.controller.servlets.SignOutServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SignOut</servlet-name>
+        <url-pattern>/signout</url-pattern>
+    </servlet-mapping>
+
 
     <servlet>
         <servlet-name>Registration</servlet-name>
@@ -35,5 +45,25 @@
     <servlet-mapping>
         <servlet-name>Start</servlet-name>
         <url-pattern>/main</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Catalog</servlet-name>
+        <servlet-class>userInterface.controller.servlets.PizzasCatalogServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Catalog</servlet-name>
+        <url-pattern>/catalog</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PersonalArea</servlet-name>
+        <servlet-class>userInterface.controller.servlets.PersonalAreaServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>PersonalArea</servlet-name>
+        <url-pattern>/personalArea</url-pattern>
     </servlet-mapping>
 </web-app>

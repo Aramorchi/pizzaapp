@@ -21,6 +21,11 @@ public class SimpleUserManager implements IUserManager{
     }
 
     @Override
+    public String getCurrentUsername() {
+        return currentUser.getUserLogin();
+    }
+
+    @Override
     public String getCurrentUserPhone() {
         return currentUser.getUserPhone();
     }
@@ -29,6 +34,7 @@ public class SimpleUserManager implements IUserManager{
     public void logIn(String login, String password) {
         currentUser = userDao.getAllUsers().stream().filter(user -> user.getUserLogin().equals(login) && user.getUserPassword().equals(password))
                 .findFirst().get();
+        System.out.println("User is: " + currentUser.getUserLogin());
     }
 
     @Override

@@ -1,15 +1,21 @@
 package userInterface.controller.servlets;
 
+import model.facade.SimpleFacade;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
-@WebServlet(urlPatterns = "/signin")
 public class SignInServlet extends HttpServlet {
+    private SimpleFacade facade = SimpleFacade.getInstance();
+
+    public SignInServlet() throws IllegalAccessException, SQLException, InstantiationException {
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher view = req.getRequestDispatcher("/AuthorizationPage.html");
@@ -18,6 +24,11 @@ public class SignInServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+
+        facade.logIn(username, password);
+
+        resp.sendRedirect("/personalArea");
     }
 }
