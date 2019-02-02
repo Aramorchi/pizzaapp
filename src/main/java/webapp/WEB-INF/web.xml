@@ -29,7 +29,7 @@
 
     <servlet>
         <servlet-name>Start</servlet-name>
-        <servlet-class>userInterface.controller.servlets.</servlet-class>
+        <servlet-class>userInterface.controller.servlets.StartPageServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

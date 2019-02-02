@@ -5,13 +5,13 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 public class Main {
     public static void main(String[] args) {
+        Server server = new Server(8080);
+        
         WebAppContext context = new WebAppContext();
-        context.setDescriptor("/webapp/WEB-INF/web.xml");
-        context.setResourceBase("/webapp");
+        context.setDescriptor("src/main/java/webapp/WEB-INF/web.xml");
+        context.setResourceBase("src/main/java/webapp");
         context.setContextPath("/");
         context.setParentLoaderPriority(true);
-
-        Server server = new Server(8080);
 
         server.setHandler(context);
 
