@@ -19,6 +19,9 @@ public class DBOrderDao implements IOrderDao {
 
     private static final int DELETING_ORDER_ORDER_ID_INDEX = 1;
 
+    private static final int UPDATING_ORDER_STATUS_STATUS_INDEX =1;
+    private static final int UPDATING_ORDER_STATUS_ORDER_ID_INDEX =2;
+
     private static final int ADDING_ORDER_USER_ID_INDEX = 1;
     private static final int ADDING_ORDER_ORDER_ID_INDEX = 2;
     private static final int ADDING_ORDER_PIZZA_ID_INDEX = 3;
@@ -76,7 +79,7 @@ public class DBOrderDao implements IOrderDao {
     public void addOrder(IOrder order) {
         int userId = order.getUserId();
         long orderId = order.getOrderId();
-        int price = order.getOrderPrice();
+        double price = order.getOrderPrice();
         LocalDateTime creationTime = order.getCreationTime();
         LocalDateTime deadline = order.getDeadline();
         LocalDateTime deliveredTime = order.getDeliveredTime();
@@ -92,7 +95,7 @@ public class DBOrderDao implements IOrderDao {
                                 stmt.setInt(ADDING_ORDER_USER_ID_INDEX, userId);
                                 stmt.setLong(ADDING_ORDER_ORDER_ID_INDEX, orderId);
                                 stmt.setInt(ADDING_ORDER_PIZZA_ID_INDEX, pizzaId);
-                                stmt.setInt(ADDING_ORDER_PRICE_INDEX, price);
+                                stmt.setDouble(ADDING_ORDER_PRICE_INDEX, price);
                                 stmt.setTimestamp(ADDING_ORDER_CREATION_TIME_INDEX, Timestamp.valueOf(creationTime));
                                 stmt.setTimestamp(ADDING_ORDER_DEADLINE_INDEX, Timestamp.valueOf(deadline));
                                 stmt.setTimestamp(ADDING_ORDER_DELIVERED_TIME_INDEX, Timestamp.valueOf(deliveredTime));
@@ -117,6 +120,20 @@ public class DBOrderDao implements IOrderDao {
         try {
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM orders WHERE orderId=?");
             stmt.setLong(DELETING_ORDER_ORDER_ID_INDEX, orderId);
+            stmt.execute();
+
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updateOrderStatus(long orderId, Status status) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("UPDATE orders SET pizzaStatus = ? WHERE orderId=?");
+            stmt.setString(UPDATING_ORDER_STATUS_STATUS_INDEX, status.name());
+            stmt.setLong(UPDATING_ORDER_STATUS_ORDER_ID_INDEX, orderId);
             stmt.execute();
 
             stmt.close();
@@ -163,84 +180,6 @@ public class DBOrderDao implements IOrderDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
-        }
-    }
-
-    public static void main(String[] args) {
-        IUser user = new User();
-
-        user.setUserLogin("Ricardo Milos");
-        user.setUserPassword("FlexTime");
-
-        IPizza pizzaOne = new Pizza();
-        IPizza pizzaTwo = new Pizza();
-        IPizza pizzaThree = new Pizza();
-
-        pizzaOne.setId(4);
-        pizzaTwo.setId(6);
-        pizzaThree.setId(7);
-
-        pizzaOne.setName("Flugegehaimen");
-        pizzaTwo.setName("Ricardo Milos");
-        pizzaThree.setName("Janitor");
-
-        pizzaOne.setPrice(62);
-        pizzaTwo.setPrice(49);
-        pizzaThree.setPrice(90);
-
-        pizzaOne.setSize(Size.MEDIUM);
-        pizzaTwo.setSize(Size.SMALL);
-        pizzaThree.setSize(Size.LARGE);
-
-        IOrder order = new Order();
-        IOrder secondOrder = new Order();
-
-        order.setUserId(1);
-        order.setOrderId(1);
-        order.addToOrder(1);
-        order.addToOrder(3);
-        order.setStatus(Status.BAKING);
-        order.setPhone("11111111");
-        order.setAddress("Bratislava, Communism street");
-        order.setOrderPrice(126);
-        order.setCreationTime(LocalDateTime.now());
-        order.setDeadline(LocalDateTime.now().plusMinutes(50));
-        order.setDeliveredTime(LocalDateTime.now().plusMinutes(42));
-
-        secondOrder.setOrderId(2);
-        secondOrder.setUserId(1);
-        secondOrder.addToOrder(2);
-        secondOrder.addToOrder(2);
-        secondOrder.addToOrder(2);
-        secondOrder.setStatus(Status.BAKING);
-        secondOrder.setPhone("11112111");
-        secondOrder.setAddress("Bratislava, Czech street");
-        secondOrder.setOrderPrice(147);
-        secondOrder.setCreationTime(LocalDateTime.now());
-        secondOrder.setDeadline(LocalDateTime.now().plusMinutes(50));
-        secondOrder.setDeliveredTime(LocalDateTime.now().plusMinutes(38));
-
-        try {
-            IUserDao dbUserDao = new DBUserDao();
-            IOrderDao dbOrderDao = new DBOrderDao();
-            IPizzaDao dbPizzaDao = new DBPizzaDao();
-
-            dbUserDao.addUser(user);
-
-            dbPizzaDao.addPizza(pizzaOne);
-            dbPizzaDao.addPizza(pizzaTwo);
-            dbPizzaDao.addPizza(pizzaThree);
-
-            dbOrderDao.addOrder(order);
-            dbOrderDao.addOrder(secondOrder);
-
-            List<IOrder> orders = dbOrderDao.getAllOrdersForUser(1);
-            orders.stream().forEach(orderr -> System.out.println(orderr.getAddress()));
-
-            System.out.println(dbOrderDao.getLastOrderId());
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

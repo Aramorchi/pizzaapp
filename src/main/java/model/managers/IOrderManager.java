@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IOrderManager {
     //returns order id
-    long createOrder(List<IPizza> pizzas, long userId, LocalDateTime orderCreationTime, String address, String phone);
+    void createOrder(List<IPizza> pizzas, int userId, LocalDateTime orderCreationTime, String address, String phone);
 }

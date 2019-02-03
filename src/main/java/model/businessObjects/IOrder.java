@@ -20,8 +20,8 @@ public interface IOrder {
     void setPhone(String phone);
     String getPhone();
     String getAddress();
-    void setOrderPrice(int price);
-    int getOrderPrice();
+    void setOrderPrice(double price);
+    double getOrderPrice();
     long getOrderId();
     void setOrderId(long orderId);
     int getUserId();

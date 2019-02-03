@@ -41,6 +41,11 @@ public class Basket implements IBasket {
     }
 
     @Override
+    public Map<Integer, Double> getBasketContent() {
+        return pizzaIDs;
+    }
+
+    @Override
     public void setUserId(int userId) {
         this.userId = userId;
     }

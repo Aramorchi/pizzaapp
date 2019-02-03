@@ -22,6 +22,11 @@ public class SimplePizzaManager implements IPizzaManager{
     }
 
     @Override
+    public IPizza getPizzaById(int pizzaId) {
+        return pizzaDao.getPizzaById(pizzaId);
+    }
+
+    @Override
     public List<IPizza> getAllPizzas() {
         return pizzaDao.getAllPizzas();
     }

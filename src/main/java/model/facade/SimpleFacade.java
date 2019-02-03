@@ -47,6 +47,10 @@ public class SimpleFacade implements IFacade {
         basketManager.addPizzaToBasket(userId, pizzaName, Size.MEDIUM);
     }
 
+    public List<String> getBasketItems() {
+        return basketManager.getBasketItems(userManager.getCurrentUserId());
+    }
+
     public void logIn(String login, String password) {
         userManager.logIn(login, password);
     }
@@ -57,6 +61,10 @@ public class SimpleFacade implements IFacade {
 
     public String getCurrentUsername() {
         return userManager.getCurrentUsername();
+    }
+
+    public void removePizzaFromBasket(String pizzaname) {
+        basketManager.deletePizzaFromBasket(userManager.getCurrentUserId(), pizzaname, Size.MEDIUM);
     }
 
     public void registerNewUser(String login, String password, String phone) {

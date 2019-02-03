@@ -17,7 +17,7 @@ public class Order implements IOrder {
     private LocalDateTime creationTime;
     private LocalDateTime deadline;
     private LocalDateTime deliveredTime;
-    private int price;
+    private double price;
 
 
     @Override
@@ -101,12 +101,12 @@ public class Order implements IOrder {
     }
 
     @Override
-    public void setOrderPrice(int price) {
+    public void setOrderPrice(double price) {
         this.price = price;
     }
 
     @Override
-    public int getOrderPrice() {
+    public double getOrderPrice() {
         return price;
     }
 

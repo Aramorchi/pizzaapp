@@ -19,7 +19,7 @@ public class SignUpServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher view = req.getRequestDispatcher("/RegistrationPage.html");
+        RequestDispatcher view = req.getRequestDispatcher("/RegistrationPage.jsp");
         view.forward(req, resp);
     }
 
@@ -31,7 +31,9 @@ public class SignUpServlet extends HttpServlet {
 
         if(repeatedPassword.equals(password)) {
             facade.registerNewUser(username, password);
+            resp.sendRedirect("/main");
         } else {
+            req.setAttribute("errorMessage", "Passwords don't match");
             doGet(req, resp);
         }
     }

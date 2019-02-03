@@ -66,4 +66,14 @@
         <servlet-name>PersonalArea</servlet-name>
         <url-pattern>/personalArea</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserBasket</servlet-name>
+        <servlet-class>userInterface.controller.servlets.UserBasketServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UserBasket</servlet-name>
+        <url-pattern>/basket</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -18,6 +18,8 @@ public class DBPizzaDao implements IPizzaDao {
     private static final int GETTING_PIZZA_NAME_INDEX = 1;
     private static final int GETTING_PIZZA_SIZE_INDEX = 2;
 
+    private static final int GETTING_PIZZA_BY_ID_ID_INDEX = 1;
+
     private static final int ADDING_PIZZA_NAME_INDEX = 1;
     private static final int ADDING_PIZZA_SIZE_INDEX = 2;
     private static final int ADDING_PIZZA_PRICE_INDEX = 3;
@@ -37,6 +39,30 @@ public class DBPizzaDao implements IPizzaDao {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM pizzas WHERE pizzaName=? and pizzaSize=?");
             stmt.setString(GETTING_PIZZA_NAME_INDEX, pizzaName);
             stmt.setString(GETTING_PIZZA_SIZE_INDEX, size.name());
+            ResultSet result = stmt.executeQuery();
+
+            IPizza pizza = new Pizza();
+            result.next();
+            pizza.setId(result.getInt("id"));
+            pizza.setName(result.getString("pizzaName"));
+            pizza.setPrice(result.getInt("price"));
+            pizza.setSize(Size.valueOf(result.getString("pizzaSize")));
+
+            result.close();
+            stmt.close();
+
+            return pizza;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public IPizza getPizzaById(int pizzaId) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM pizzas WHERE id=?");
+            stmt.setInt(GETTING_PIZZA_NAME_INDEX, pizzaId);
             ResultSet result = stmt.executeQuery();
 
             IPizza pizza = new Pizza();
